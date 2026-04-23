@@ -9,16 +9,18 @@ add_executable(${CMAKE_PROJECT_NAME})
 
 
 # Add dependencies
-find_package(glfw3 CONFIG REQUIRED)
-find_package(glad  CONFIG REQUIRED)
-find_package(glm   CONFIG REQUIRED)
-find_package(Stb   REQUIRED)
+find_package(glfw3  CONFIG REQUIRED)
+find_package(glad   CONFIG REQUIRED)
+find_package(glm    CONFIG REQUIRED)
+find_package(assimp CONFIG REQUIRED)
+find_package(Stb    REQUIRED)
 
 # Link to the libs
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE 
     glfw
     glad::glad
     glm::glm
+    assimp::assimp
 )
 
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${Stb_INCLUDE_DIR})
