@@ -5,7 +5,7 @@
       "name": "default",
       "inherits": "vcpkg",
       "environment": {
-        "VCPKG_ROOT": "/home/bruno/projects/CardGamePrototype/vcpkg/"
+        "VCPKG_ROOT": "${sourceDir}/vcpkg/"
       }}
   ]
 }
