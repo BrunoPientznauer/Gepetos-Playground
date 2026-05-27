@@ -25,7 +25,8 @@ void Shader::Compile(const char *vertexSource, const char *fragmentSource, const
     checkCompileErrors(fragmentShader, "FRAGMENT");
 
     // geometry shader (if is applied)
-    if(geometrySource != nullptr){
+    if (geometrySource != nullptr)
+    {
         geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
         glShaderSource(geometryShader, 1, &geometrySource, NULL);
         glCompileShader(geometryShader);
@@ -36,7 +37,8 @@ void Shader::Compile(const char *vertexSource, const char *fragmentSource, const
     this->ID = glCreateProgram();
     glAttachShader(this->ID, vertexShader);
     glAttachShader(this->ID, fragmentShader);
-    if(geometrySource != nullptr){
+    if (geometrySource != nullptr)
+    {
         glAttachShader(this->ID, geometryShader);
     }
 
@@ -46,7 +48,8 @@ void Shader::Compile(const char *vertexSource, const char *fragmentSource, const
     // free shader as they are no longer necessary
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
-    if(geometrySource != nullptr){
+    if (geometrySource != nullptr)
+    {
         glDeleteShader(geometryShader);
     }
 }
@@ -111,7 +114,7 @@ void Shader::checkCompileErrors(unsigned int object, std::string type)
 {
     int success;
     char infolog[1024];
-    if(type == COMPILE_PROGRAM)
+    if (type == COMPILE_PROGRAM)
     {
         glGetShaderiv(object, GL_LINK_STATUS, &success);
         if (!success)
@@ -121,10 +124,11 @@ void Shader::checkCompileErrors(unsigned int object, std::string type)
                       << infolog << "\n -- --------------------------------------------------- -- "
                       << std::endl;
         }
-    }else
+    }
+    else
     {
         glGetShaderiv(object, GL_COMPILE_STATUS, &success);
-        if(!success)
+        if (!success)
         {
             glGetShaderInfoLog(object, 1024, NULL, infolog);
             std::cout << "| ERROR::SHADER Compile-time error: TYPE: " << type << "\n"

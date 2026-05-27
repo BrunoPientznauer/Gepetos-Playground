@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10.0)
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake" 
     CACHE STRING "Vcpkg toolchain file")
 
-project(CardGamePrototype VERSION 1.0)
+project(Gepetos-Playground VERSION 1.0)
 
 add_executable(${CMAKE_PROJECT_NAME})
 
