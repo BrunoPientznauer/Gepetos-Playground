@@ -1,7 +1,10 @@
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+
+#include "model.h"
+#include "resource_manager.h"
+#include "camera.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -40,6 +43,18 @@ int main()
         return -1;
     }    
 
+    Model backpack("assets/Survival_BackPack/Survival_BackPack_2.fbx");
+    Shader shader = ResourceManager::LoadShader("resources/shaders/test.vs", "resources/shaders/test.fs", nullptr, "teste");
+
+    Camera camera(glm::vec3(0.f, 0.f, 5.0f));
+    glm::mat4 projection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.f);
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(0.f, 0.f, 0.f));
+    shader.Use();
+    shader.SetMatrix4("view", camera.GetViewMatrix());
+    shader.SetMatrix4("projection", projection);
+    shader.SetMatrix4("model", model);
+
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
@@ -53,6 +68,8 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        backpack.Draw(shader);
+
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
@@ -61,6 +78,7 @@ int main()
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
+    ResourceManager::Clear();
     glfwTerminate();
     return 0;
 }

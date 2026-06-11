@@ -12,7 +12,7 @@ private:
 
 public:
 
-    static Shader LoadShader(const char *vertexSource, const char *fragmentSource, const char *geometrySource = nullptr, std::string name);
+    static Shader LoadShader(const char *vertexSource, const char *fragmentSource, const char *geometrySource, std::string name);
     static Shader GetShader(std::string name);
 
     /**
