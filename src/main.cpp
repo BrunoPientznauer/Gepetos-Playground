@@ -22,6 +22,7 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+    stbi_set_flip_vertically_on_load(true);
 
     // glfw window creation
     // --------------------
@@ -43,7 +44,7 @@ int main()
         return -1;
     }    
 
-    Model backpack("assets/Survival_BackPack/Survival_BackPack_2.fbx");
+    Model backpack("assets/backpack/backpack.obj");
     Shader shader = ResourceManager::LoadShader("resources/shaders/test.vs", "resources/shaders/test.fs", nullptr, "teste");
 
     Camera camera(glm::vec3(0.f, 0.f, 5.0f));

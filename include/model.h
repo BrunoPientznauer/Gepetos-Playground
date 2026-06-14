@@ -6,6 +6,8 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+
+#define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
 #include "mesh.h"
@@ -101,6 +103,7 @@ private:
                 // texture coords
                 texCoordsVec.x = mesh->mTextureCoords[0][i].x;
                 texCoordsVec.y = mesh->mTextureCoords[0][i].y;
+                vertex.TexCoords = texCoordsVec;
 
                 // tangent
                 vector.x = mesh->mTangents[i].x;
@@ -163,8 +166,11 @@ private:
             material->GetTexture(textureType, i, &str);
 
             bool skip = false;
-            for(unsigned int j = 0; j < textures_loaded.size(); j++){
-                if(std::strcmp(textures_loaded[j].path.data(), str.C_Str()) == 0){
+            for (unsigned int j = 0; j < textures_loaded.size(); j++)
+            {
+
+                if (std::strcmp(textures_loaded[j].path.data(), str.C_Str()) == 0)
+                {
                     textures.push_back(textures_loaded[j]);
                     skip = true;
                     break;
@@ -190,7 +196,7 @@ private:
 unsigned int TextureFromFile(const char *path, const std::string directory)
 {
     std::string filename = std::string(path);
-    filename = directory + "/" + filename;
+    filename =  directory + '/' + filename;
 
     unsigned int textureID;
     glGenTextures(1, &textureID);
@@ -223,7 +229,7 @@ unsigned int TextureFromFile(const char *path, const std::string directory)
 
         stbi_image_free(data);
     }else{
-        std::cout << "Texture failed to load at path: " << path << std::endl;
+        std::cout << "Texture failed to load at path: "<< filename + " "  <<  stbi_failure_reason() << std::endl;
         stbi_image_free(data);
     }
 
