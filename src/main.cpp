@@ -44,6 +44,10 @@ int main()
         return -1;
     }    
 
+    // Configure global opengl state
+    // ----------------------------
+    glEnable(GL_DEPTH_TEST);
+
     Model backpack("assets/backpack/backpack.obj");
     Shader shader = ResourceManager::LoadShader("resources/shaders/test.vs", "resources/shaders/test.fs", nullptr, "teste");
 
@@ -66,8 +70,8 @@ int main()
 
         // render
         // ------
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         backpack.Draw(shader);
 

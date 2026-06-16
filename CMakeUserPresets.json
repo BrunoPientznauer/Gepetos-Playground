@@ -3,7 +3,7 @@
   "configurePresets": [
     {
       "name": "default",
-      "inherits": "vcpkg",
+      "inherits": "debug",
       "environment": {
         "VCPKG_ROOT": "${sourceDir}/vcpkg/"
       }}
