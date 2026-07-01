@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "model.h"
+#include "renderable_object.h"
 #include "resource_manager.h"
 #include "camera.h"
 
@@ -48,11 +49,11 @@ int main()
     // ----------------------------
     glEnable(GL_DEPTH_TEST);
 
-    Model backpack("assets/backpack/backpack.obj");
+    RenderableObject backpack("assets/backpack/backpack.obj");
     Shader shader = ResourceManager::LoadShader("resources/shaders/test.vs", "resources/shaders/test.fs", nullptr, "teste");
 
     Camera camera(glm::vec3(0.f, 0.f, 5.0f));
-    glm::mat4 projection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.f);
+    glm::mat4 projection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 1000.f);
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(0.f, 0.f, 0.f));
     shader.Use();

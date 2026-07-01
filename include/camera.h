@@ -33,7 +33,7 @@ public:
     }
 
     glm::mat4 GetViewMatrix(){
-        return glm::lookAt(this->position, this->position + front, up);
+        return glm::lookAt(this->transform.Position, this->transform.Position + front, up);
     }
 
 private:

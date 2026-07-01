@@ -26,11 +26,11 @@ public:
         loadModel(path);
     }
 
-    void Draw(Shader &shader)
+    void Draw(Shader &shader, glm::mat4 modelMatrix)
     {
         for (auto mesh : meshes)
         {
-            mesh.Draw(shader);
+            mesh.Draw(shader, modelMatrix);
         }
     }
 

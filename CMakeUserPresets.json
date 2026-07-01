@@ -2,8 +2,8 @@
   "version": 2,
   "configurePresets": [
     {
-      "name": "default",
-      "inherits": "debug",
+      "name": "debug-nj",
+      "inherits": "debug-ninja",
       "environment": {
         "VCPKG_ROOT": "${sourceDir}/vcpkg/"
       }}
