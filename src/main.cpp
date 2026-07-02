@@ -7,12 +7,26 @@
 #include "resource_manager.h"
 #include "camera.h"
 
+void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
+
+float screen_width = SCR_WIDTH;
+float screen_height = SCR_HEIGHT;
+
+Camera camera(glm::vec3(0.f, 0.f, 5.0f));
+float cameraMoveSpeed = 2.f;
+
+float deltaTime = 0.f;
+float lastFrame = 0.f;
+
+float lastMouseX;
+float lastMouseY;
+bool firstMouse = true;
 
 int main()
 {
@@ -22,6 +36,7 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
     stbi_set_flip_vertically_on_load(true);
 
@@ -36,6 +51,7 @@ int main()
     }
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
@@ -50,24 +66,33 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     RenderableObject backpack("assets/backpack/backpack.obj");
+
     Shader shader = ResourceManager::LoadShader("resources/shaders/test.vs", "resources/shaders/test.fs", nullptr, "teste");
 
-    Camera camera(glm::vec3(0.f, 0.f, 5.0f));
-    glm::mat4 projection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 1000.f);
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(0.f, 0.f, 0.f));
     shader.Use();
-    shader.SetMatrix4("view", camera.GetViewMatrix());
-    shader.SetMatrix4("projection", projection);
     shader.SetMatrix4("model", model);
-
+    
+    glfwShowWindow(window);
+    
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
     {
+        
+        // calculates delta time
+        auto currentFrame =  static_cast<float>(glfwGetTime());
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+        
         // input
         // -----
         processInput(window);
+        
+        glm::mat4 projection = glm::perspective(glm::radians(90.0f), screen_width / screen_height, 0.1f, 1000.f);
+        shader.SetMatrix4("projection", projection);
+        shader.SetMatrix4("view", camera.GetViewMatrix());
 
         // render
         // ------
@@ -93,8 +118,25 @@ int main()
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow *window)
 {
-    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
         glfwSetWindowShouldClose(window, true);
+    }
+
+    if(glfwGetKey(window, GLFW_KEY_W)){
+        camera.transform.Position.z -= cameraMoveSpeed * deltaTime;
+    }else if (glfwGetKey(window, GLFW_KEY_A)) {
+        camera.transform.Position.x -= cameraMoveSpeed * deltaTime;
+    }else if (glfwGetKey(window, GLFW_KEY_S)) {
+        camera.transform.Position.z += cameraMoveSpeed * deltaTime;
+    }else if (glfwGetKey(window, GLFW_KEY_D)) {
+        camera.transform.Position.x += cameraMoveSpeed * deltaTime;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_E)) {
+        camera.transform.Position.y += cameraMoveSpeed * deltaTime;
+    }else if (glfwGetKey(window, GLFW_KEY_Q)) {
+        camera.transform.Position.y -= cameraMoveSpeed * deltaTime;
+    }
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
@@ -104,4 +146,22 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
+    screen_width = width;
+    screen_height = height;
+}
+
+void mouse_callback(GLFWwindow *window, double xpos, double ypos){
+     if(firstMouse){
+        lastMouseX = xpos;
+        lastMouseY = ypos;
+        firstMouse = false;
+    }
+
+    float xOffset = xpos - lastMouseX;
+    float yOffset = lastMouseY - ypos;
+
+    lastMouseX = xpos;
+    lastMouseY = ypos;
+
+    camera.ProcessMouseMovement(xOffset, yOffset);
 }

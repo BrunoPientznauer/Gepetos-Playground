@@ -1,6 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#include <GL/gl.h>
 #include <game_object.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -34,6 +35,26 @@ public:
 
     glm::mat4 GetViewMatrix(){
         return glm::lookAt(this->transform.Position, this->transform.Position + front, up);
+    }
+
+    void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constainPitch = true){
+        xoffset *= .1f;
+        yoffset *= .1f;
+
+        yaw   += xoffset;
+        pitch += yoffset;
+
+        if(constainPitch){
+            if(pitch > 89.0f){
+                pitch = 89.0f;
+            }
+
+            if(pitch < -89.0f){
+                pitch = -89.0f;
+            }
+        }
+
+        updateCameraVectors();
     }
 
 private:
