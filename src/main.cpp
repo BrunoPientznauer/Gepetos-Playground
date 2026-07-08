@@ -10,15 +10,16 @@
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
+void setupQuad();
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+unsigned int SCR_WIDTH = 800;
+unsigned int SCR_HEIGHT = 600;
 
 float screen_width = SCR_WIDTH;
 float screen_height = SCR_HEIGHT;
 
-Camera camera(glm::vec3(0.f, 0.f, 5.0f));
+Camera camera(glm::vec3(0.f, 0.1f, 0.0f));
 float cameraMoveSpeed = 2.f;
 
 float deltaTime = 0.f;
@@ -27,6 +28,9 @@ float lastFrame = 0.f;
 float lastMouseX;
 float lastMouseY;
 bool firstMouse = true;
+
+unsigned int quadVAO, quadVBO;
+
 
 int main()
 {
@@ -37,6 +41,11 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+
+    GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode *mode = glfwGetVideoMode(monitor);
+    SCR_HEIGHT = mode->height;
+    SCR_WIDTH  = mode->width;
 
     stbi_set_flip_vertically_on_load(true);
 
@@ -64,10 +73,14 @@ int main()
     // Configure global opengl state
     // ----------------------------
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     RenderableObject backpack("assets/backpack/backpack.obj");
 
     Shader shader = ResourceManager::LoadShader("resources/shaders/test.vs", "resources/shaders/test.fs", nullptr, "teste");
+    Shader gridShader = ResourceManager::LoadShader("resources/shaders/infinite_grid.vs","resources/shaders/infinite_grid.fs", nullptr,"infinite_grid");
 
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(0.f, 0.f, 0.f));
@@ -75,6 +88,8 @@ int main()
     shader.SetMatrix4("model", model);
     
     glfwShowWindow(window);
+
+    setupQuad();
     
     // render loop
     // -----------
@@ -91,15 +106,24 @@ int main()
         processInput(window);
         
         glm::mat4 projection = glm::perspective(glm::radians(90.0f), screen_width / screen_height, 0.1f, 1000.f);
-        shader.SetMatrix4("projection", projection);
-        shader.SetMatrix4("view", camera.GetViewMatrix());
+        shader.SetMatrix4("projection", projection, true);
+        shader.SetMatrix4("view", camera.GetViewMatrix(), true);
 
         // render
         // ------
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         backpack.Draw(shader);
+
+        // render Grid
+        // -----------
+        gridShader.Use();
+        gridShader.SetMatrix4("projection", projection, true);
+        gridShader.SetMatrix4("view", camera.GetViewMatrix(), true);
+        gridShader.SetVector3f("cameraPos", camera.transform.Position);
+        glBindVertexArray(quadVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -112,6 +136,30 @@ int main()
     ResourceManager::Clear();
     glfwTerminate();
     return 0;
+}
+
+void setupQuad(){
+  float vertices[] = {
+      // Coordenadas   // Textura
+      -0.5f, 0.5f,  0.0f, 0.0f, 1.0f, // Superior Esquerdo
+      -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // Inferior Esquerdo
+      0.5f,  0.5f,  0.0f, 1.0f, 1.0f, // Superior Direito
+      0.5f,  -0.5f, 0.0f, 1.0f, 0.0f  // Inferior Direito
+  };
+
+  glGenVertexArrays(1, &quadVAO);
+  glGenBuffers(1, &quadVBO);
+
+  glBindVertexArray(quadVAO);
+
+  glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
+
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
 }
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
