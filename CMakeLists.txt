@@ -25,11 +25,23 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
 
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${Stb_INCLUDE_DIR})
 target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC include)
-target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC assets)
 
 #add resources/assets folders
-file(COPY resources DESTINATION ${CMAKE_BINARY_DIR})
-file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
+add_custom_target(resources ALL 
+                  COMMAND ${CMAKE_COMMAND} -E copy_directory
+                  ${PROJECT_SOURCE_DIR}/resources
+                  ${PROJECT_BINARY_DIR}/resources
+                  COMMENT "Copying resources into binary directory" )  
+
+add_custom_target(assets ALL 
+                  COMMAND ${CMAKE_COMMAND} -E copy_directory
+                  ${PROJECT_SOURCE_DIR}/assets
+                  ${PROJECT_BINARY_DIR}/assets
+                  COMMENT "Copying assets into binary directory" )  
+
+add_dependencies(${CMAKE_PROJECT_NAME} resources)
+add_dependencies(${CMAKE_PROJECT_NAME} assets)
+
  
 #sources and headers
 file(GLOB_RECURSE GAME_SOURCES CONFIGURE_DEPENDS
