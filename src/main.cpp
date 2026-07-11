@@ -20,7 +20,6 @@ float screen_width = SCR_WIDTH;
 float screen_height = SCR_HEIGHT;
 
 Camera camera(glm::vec3(0.f, 0.1f, 0.0f));
-float cameraMoveSpeed = 2.f;
 
 float deltaTime = 0.f;
 float lastFrame = 0.f;
@@ -34,6 +33,8 @@ unsigned int quadVAO, quadVBO;
 
 int main()
 {
+    camera.moveSpeed = 2.0f;
+
     // glfw: initialize and configure
     // ------------------------------
     glfwInit();
@@ -170,21 +171,7 @@ void processInput(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
     }
 
-    if(glfwGetKey(window, GLFW_KEY_W)){
-        camera.transform.Position.z -= cameraMoveSpeed * deltaTime;
-    }else if (glfwGetKey(window, GLFW_KEY_A)) {
-        camera.transform.Position.x -= cameraMoveSpeed * deltaTime;
-    }else if (glfwGetKey(window, GLFW_KEY_S)) {
-        camera.transform.Position.z += cameraMoveSpeed * deltaTime;
-    }else if (glfwGetKey(window, GLFW_KEY_D)) {
-        camera.transform.Position.x += cameraMoveSpeed * deltaTime;
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_E)) {
-        camera.transform.Position.y += cameraMoveSpeed * deltaTime;
-    }else if (glfwGetKey(window, GLFW_KEY_Q)) {
-        camera.transform.Position.y -= cameraMoveSpeed * deltaTime;
-    }
+    camera.OnKeyboardDown(window, deltaTime);
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

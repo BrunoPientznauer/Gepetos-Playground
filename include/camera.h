@@ -2,6 +2,7 @@
 #define CAMERA_H
 
 #include <GL/gl.h>
+#include <GLFW/glfw3.h>
 #include <game_object.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -12,18 +13,19 @@ const float PITCH       =  0.0f;
 
 class Camera : public GameObject
 {
-private:
+public:
+    /* DATA */
+    float fov;
+    float yaw;
+    float pitch;
+
     /* Camera vectors */
     glm::vec3 front;
     glm::vec3 right;
     glm::vec3 up;
     glm::vec3 worldUp;
 
-public:
-    /* DATA */
-    float fov;
-    float yaw;
-    float pitch;
+    float moveSpeed = 1.0f;
 
     Camera(glm::vec3 position, float fov = 45.f, float yaw = YAW, float pitch = PITCH, glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f)) : GameObject(position), fov(fov)
     {
@@ -55,6 +57,24 @@ public:
         }
 
         updateCameraVectors();
+    }
+
+    void OnKeyboardDown(GLFWwindow *window, float deltaTime){
+      if (glfwGetKey(window, GLFW_KEY_W)) {
+        transform.Position += front * moveSpeed * deltaTime;
+      } else if (glfwGetKey(window, GLFW_KEY_A)) {
+        transform.Position -= right * moveSpeed * deltaTime;
+      } else if (glfwGetKey(window, GLFW_KEY_S)) {
+        transform.Position -= front * moveSpeed * deltaTime;
+      } else if (glfwGetKey(window, GLFW_KEY_D)) {
+        transform.Position += right * moveSpeed * deltaTime;
+      }
+
+      if (glfwGetKey(window, GLFW_KEY_E)) {
+        transform.Position.y += moveSpeed * deltaTime;
+      } else if (glfwGetKey(window, GLFW_KEY_Q)) {
+        transform.Position.y -= moveSpeed * deltaTime;
+      }
     }
 
 private:
