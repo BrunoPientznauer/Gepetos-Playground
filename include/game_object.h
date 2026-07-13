@@ -12,6 +12,8 @@ public:
 
     GameObject() {}
     GameObject(glm::vec3 position) { transform.Position = position; }
+
+    // virtual void Update(float deltaTime);
 };
 
 

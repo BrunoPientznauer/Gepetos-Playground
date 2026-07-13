@@ -7,12 +7,24 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#define SCREEN_MARGIN 10.f
+
 // Default camera values
 const float YAW         = -90.0f;
 const float PITCH       =  0.0f;
 
 class Camera : public GameObject
 {
+private:
+  bool mouseOnRightEdge = false;
+  bool mouseOnLeftEdge = false;
+  bool mouseOnUpperdge = false;
+  bool mouseOnLowerEdge = false;
+  bool firstMouse = true;
+
+  float lastMouseX = 0.f;
+  float lastMouseY = 0.f;
+
 public:
     /* DATA */
     float fov;
@@ -27,67 +39,20 @@ public:
 
     float moveSpeed = 1.0f;
 
-    Camera(glm::vec3 position, float fov = 45.f, float yaw = YAW, float pitch = PITCH, glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f)) : GameObject(position), fov(fov)
-    {
-        this->worldUp = worldUp;
-        this->yaw = yaw;
-        this->pitch = pitch;
-        updateCameraVectors();
-    }
+    Camera(glm::vec3 position, float fov = 45.f, float yaw = YAW, float pitch = PITCH, glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f));
 
-    glm::mat4 GetViewMatrix(){
-        return glm::lookAt(this->transform.Position, this->transform.Position + front, up);
-    }
+    glm::mat4 GetViewMatrix();
 
-    void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constainPitch = true){
-        xoffset *= .1f;
-        yoffset *= .1f;
+    void ProccessMouseMovement(GLFWwindow *window, double xpos, double ypos);
 
-        yaw   += xoffset;
-        pitch += yoffset;
+    void ProcessCameraRotation(float xoffset, float yoffset, GLboolean constrainPitch = true);
 
-        if(constainPitch){
-            if(pitch > 89.0f){
-                pitch = 89.0f;
-            }
+    void OnKeyboardDown(GLFWwindow *window, float deltaTime);
 
-            if(pitch < -89.0f){
-                pitch = -89.0f;
-            }
-        }
+    void Update(float deltaTime);
 
-        updateCameraVectors();
-    }
-
-    void OnKeyboardDown(GLFWwindow *window, float deltaTime){
-      if (glfwGetKey(window, GLFW_KEY_W)) {
-        transform.Position += front * moveSpeed * deltaTime;
-      } else if (glfwGetKey(window, GLFW_KEY_A)) {
-        transform.Position -= right * moveSpeed * deltaTime;
-      } else if (glfwGetKey(window, GLFW_KEY_S)) {
-        transform.Position -= front * moveSpeed * deltaTime;
-      } else if (glfwGetKey(window, GLFW_KEY_D)) {
-        transform.Position += right * moveSpeed * deltaTime;
-      }
-
-      if (glfwGetKey(window, GLFW_KEY_E)) {
-        transform.Position.y += moveSpeed * deltaTime;
-      } else if (glfwGetKey(window, GLFW_KEY_Q)) {
-        transform.Position.y -= moveSpeed * deltaTime;
-      }
-    }
-
-private:
-    void updateCameraVectors(){
-        glm::vec3 frontVec;
-        frontVec.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-        frontVec.y = sin(glm::radians(pitch));
-        frontVec.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-
-        front = glm::normalize(frontVec);
-        right = glm::normalize(glm::cross(front, worldUp));
-        up    = glm::normalize(glm::cross(right, front));
-    }
+  private:
+    void updateCameraVectors();
 };
 
 

@@ -2,6 +2,8 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+#define STB_IMAGE_IMPLEMENTATION
+
 #include "model.h"
 #include "renderable_object.h"
 #include "resource_manager.h"
@@ -105,6 +107,8 @@ int main()
         // input
         // -----
         processInput(window);
+
+        camera.Update(deltaTime);
         
         glm::mat4 projection = glm::perspective(glm::radians(90.0f), screen_width / screen_height, 0.1f, 1000.f);
         shader.SetMatrix4("projection", projection, true);
@@ -186,17 +190,5 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 
 void mouse_callback(GLFWwindow *window, double xpos, double ypos){
-     if(firstMouse){
-        lastMouseX = xpos;
-        lastMouseY = ypos;
-        firstMouse = false;
-    }
-
-    float xOffset = xpos - lastMouseX;
-    float yOffset = lastMouseY - ypos;
-
-    lastMouseX = xpos;
-    lastMouseY = ypos;
-
-    camera.ProcessMouseMovement(xOffset, yOffset);
+   camera.ProccessMouseMovement(window, xpos, ypos);
 }
