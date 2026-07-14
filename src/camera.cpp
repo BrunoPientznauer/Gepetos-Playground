@@ -1,6 +1,6 @@
 #include "camera.h"
 
-Camera::Camera(glm::vec3 position, float fov, float yaw, float pitch, glm::vec3 worldUp): GameObject(position), fov(fov) {
+Camera::Camera(glm::vec3 position, float aspectRatio, float fov, float yaw, float pitch, glm::vec3 worldUp): GameObject(position), fov(fov), aspectRatio(aspectRatio) {
   this->worldUp = worldUp;
   this->yaw = yaw;
   this->pitch = pitch;
@@ -85,6 +85,10 @@ void Camera::OnKeyboardDown(GLFWwindow *window, float deltaTime) {
 
 glm::mat4 Camera::GetViewMatrix() {
   return glm::lookAt(this->transform.Position, this->transform.Position + front, up);
+}
+
+glm::mat4 Camera::GetProjectionMatrix() {
+  return glm::perspective(this->fov, this->aspectRatio, 0.1f, 1000.f);
 }
 
 void Camera::updateCameraVectors() {

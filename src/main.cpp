@@ -1,13 +1,15 @@
+#include "scene_renderer.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/ext/vector_float3.hpp>
 #include <iostream>
+#include <vector>
 
-#define STB_IMAGE_IMPLEMENTATION
-
-#include "model.h"
 #include "renderable_object.h"
 #include "resource_manager.h"
 #include "camera.h"
+#include <stb_image.h>
+
 
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -21,7 +23,8 @@ unsigned int SCR_HEIGHT = 600;
 float screen_width = SCR_WIDTH;
 float screen_height = SCR_HEIGHT;
 
-Camera camera(glm::vec3(0.f, 0.1f, 0.0f));
+Camera camera(glm::vec3(0.f, 0.1f, 0.0f), screen_width/screen_height);
+Scene scene = {.mainCamera = camera};
 
 float deltaTime = 0.f;
 float lastFrame = 0.f;
@@ -47,14 +50,16 @@ int main()
 
     GLFWmonitor *monitor = glfwGetPrimaryMonitor();
     const GLFWvidmode *mode = glfwGetVideoMode(monitor);
-    SCR_HEIGHT = mode->height;
-    SCR_WIDTH  = mode->width;
+    screen_width = mode->height;
+    screen_height  = mode->width;
+
+    scene.mainCamera.aspectRatio = screen_height/screen_width;
 
     stbi_set_flip_vertically_on_load(true);
 
     // glfw window creation
     // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Gepetos-Playground", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(screen_width, screen_height, "Gepetos-Playground", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -80,16 +85,15 @@ int main()
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    Renderer renderer;
     RenderableObject backpack("assets/backpack/backpack.obj");
+    RenderableObject backpack2("assets/backpack/backpack.obj");
+    backpack2.transform.Position = glm::vec3(4.0f, 0.f, 2.0f);
 
-    Shader shader = ResourceManager::LoadShader("resources/shaders/test.vs", "resources/shaders/test.fs", nullptr, "teste");
     Shader gridShader = ResourceManager::LoadShader("resources/shaders/infinite_grid.vs","resources/shaders/infinite_grid.fs", nullptr,"infinite_grid");
+    scene.objects.push_back(backpack);
+    scene.objects.push_back(backpack2);
 
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(0.f, 0.f, 0.f));
-    shader.Use();
-    shader.SetMatrix4("model", model);
-    
     glfwShowWindow(window);
 
     setupQuad();
@@ -108,25 +112,21 @@ int main()
         // -----
         processInput(window);
 
-        camera.Update(deltaTime);
+        scene.mainCamera.Update(deltaTime);
         
-        glm::mat4 projection = glm::perspective(glm::radians(90.0f), screen_width / screen_height, 0.1f, 1000.f);
-        shader.SetMatrix4("projection", projection, true);
-        shader.SetMatrix4("view", camera.GetViewMatrix(), true);
-
         // render
         // ------
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        backpack.Draw(shader);
+        renderer.Render(scene);
 
         // render Grid
         // -----------
         gridShader.Use();
-        gridShader.SetMatrix4("projection", projection, true);
-        gridShader.SetMatrix4("view", camera.GetViewMatrix(), true);
-        gridShader.SetVector3f("cameraPos", camera.transform.Position);
+        gridShader.SetMatrix4("projection", scene.mainCamera.GetProjectionMatrix(), true);
+        gridShader.SetMatrix4("view", scene.mainCamera.GetViewMatrix(), true);
+        gridShader.SetVector3f("cameraPos", scene.mainCamera.transform.Position);
         glBindVertexArray(quadVAO);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
@@ -175,7 +175,7 @@ void processInput(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
     }
 
-    camera.OnKeyboardDown(window, deltaTime);
+    scene.mainCamera.OnKeyboardDown(window, deltaTime);
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
@@ -190,5 +190,5 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 
 void mouse_callback(GLFWwindow *window, double xpos, double ypos){
-   camera.ProccessMouseMovement(window, xpos, ypos);
+   scene.mainCamera.ProccessMouseMovement(window, xpos, ypos);
 }

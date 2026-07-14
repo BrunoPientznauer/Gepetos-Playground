@@ -4,21 +4,24 @@
     "type": "split",
     "children": [
       {
-        "id": "fa7e72111cc20c56",
+        "id": "ee8606d8995a33b6",
         "type": "tabs",
         "children": [
           {
-            "id": "6061faa09f2d4443",
+            "id": "46374a18945b1852",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "canvas",
               "state": {
-                "file": "Welcome.md",
-                "mode": "source",
-                "source": false
+                "file": "Scene.canvas",
+                "viewState": {
+                  "x": -221,
+                  "y": 76.80000000000001,
+                  "zoom": 0
+                }
               },
-              "icon": "lucide-file",
-              "title": "Welcome"
+              "icon": "lucide-layout-dashboard",
+              "title": "Scene"
             }
           }
         ]
@@ -183,8 +186,9 @@
       "bases:Create new base": false
     }
   },
-  "active": "6061faa09f2d4443",
+  "active": "46374a18945b1852",
   "lastOpenFiles": [
-    "Welcome.md"
+    "Scene.canvas",
+    "Scene.md"
   ]
 }

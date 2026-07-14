@@ -1,6 +1,9 @@
 #include "model.h"
 #include <iostream>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
 unsigned int TextureFromFile(const char *path, const std::string directory);
 
 Model::Model(std::string const path, bool gamma) : gammaCorrection(gamma) {

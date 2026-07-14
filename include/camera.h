@@ -26,33 +26,38 @@ private:
   float lastMouseY = 0.f;
 
 public:
-    /* DATA */
-    float fov;
-    float yaw;
-    float pitch;
+  /* DATA */
+  float fov;
+  float yaw;
+  float pitch;
+  float aspectRatio;
 
-    /* Camera vectors */
-    glm::vec3 front;
-    glm::vec3 right;
-    glm::vec3 up;
-    glm::vec3 worldUp;
+  /* Camera vectors */
+  glm::vec3 front;
+  glm::vec3 right;
+  glm::vec3 up;
+  glm::vec3 worldUp;
 
-    float moveSpeed = 1.0f;
+  float moveSpeed = 1.0f;
 
-    Camera(glm::vec3 position, float fov = 45.f, float yaw = YAW, float pitch = PITCH, glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f));
+  Camera(glm::vec3 position, float aspectRatio, float fov = 45.f,
+         float yaw = YAW, float pitch = PITCH,
+         glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f));
 
-    glm::mat4 GetViewMatrix();
+  glm::mat4 GetViewMatrix();
 
-    void ProccessMouseMovement(GLFWwindow *window, double xpos, double ypos);
+  glm::mat4 GetProjectionMatrix();
 
-    void ProcessCameraRotation(float xoffset, float yoffset, GLboolean constrainPitch = true);
+  void ProccessMouseMovement(GLFWwindow *window, double xpos, double ypos);
 
-    void OnKeyboardDown(GLFWwindow *window, float deltaTime);
+  void ProcessCameraRotation(float xoffset, float yoffset, GLboolean constrainPitch = true);
 
-    void Update(float deltaTime);
+  void OnKeyboardDown(GLFWwindow *window, float deltaTime);
 
-  private:
-    void updateCameraVectors();
+  void Update(float deltaTime);
+
+private:
+  void updateCameraVectors();
 };
 
 
