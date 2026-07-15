@@ -1,4 +1,5 @@
 #include "camera.h"
+#include <GLFW/glfw3.h>
 
 Camera::Camera(glm::vec3 position, float aspectRatio, float fov, float yaw, float pitch, glm::vec3 worldUp): GameObject(position), fov(fov), aspectRatio(aspectRatio) {
   this->worldUp = worldUp;
@@ -46,6 +47,8 @@ void Camera::Update(float deltaTime) {
 }
 
 void Camera::ProcessCameraRotation(float xoffset, float yoffset, GLboolean constrainPitch) {
+  if(!canRotate) return;
+
   xoffset *= .1f;
   yoffset *= .1f;
 
@@ -81,6 +84,9 @@ void Camera::OnKeyboardDown(GLFWwindow *window, float deltaTime) {
   } else if (glfwGetKey(window, GLFW_KEY_Q)) {
     transform.Position.y -= moveSpeed * deltaTime;
   }
+}
+void Camera::OnMouseButtonDown(GLFWwindow *window, int button) {
+  canRotate = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS;
 }
 
 glm::mat4 Camera::GetViewMatrix() {

@@ -1,20 +1,18 @@
-#include "scene_renderer.h"
+#include "game.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/ext/vector_float3.hpp>
 #include <iostream>
-#include <vector>
-
-#include "renderable_object.h"
 #include "resource_manager.h"
-#include "camera.h"
 #include <stb_image.h>
 
 
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
+void mouse_button_callback(GLFWwindow *window, int button, int action, int mods);
 void setupQuad();
+void renderGrid();
 
 // settings
 unsigned int SCR_WIDTH = 800;
@@ -23,23 +21,17 @@ unsigned int SCR_HEIGHT = 600;
 float screen_width = SCR_WIDTH;
 float screen_height = SCR_HEIGHT;
 
-Camera camera(glm::vec3(0.f, 0.1f, 0.0f), screen_width/screen_height);
-Scene scene = {.mainCamera = camera};
-
 float deltaTime = 0.f;
 float lastFrame = 0.f;
 
-float lastMouseX;
-float lastMouseY;
-bool firstMouse = true;
-
 unsigned int quadVAO, quadVBO;
 
+bool showGrid = true;
+
+Game *gamePtr;
 
 int main()
 {
-    camera.moveSpeed = 2.0f;
-
     // glfw: initialize and configure
     // ------------------------------
     glfwInit();
@@ -48,12 +40,6 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
-    GLFWmonitor *monitor = glfwGetPrimaryMonitor();
-    const GLFWvidmode *mode = glfwGetVideoMode(monitor);
-    screen_width = mode->height;
-    screen_height  = mode->width;
-
-    scene.mainCamera.aspectRatio = screen_height/screen_width;
 
     stbi_set_flip_vertically_on_load(true);
 
@@ -66,9 +52,11 @@ int main()
         glfwTerminate();
         return -1;
     }
+
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
@@ -78,6 +66,9 @@ int main()
         return -1;
     }    
 
+    Game game;
+    gamePtr = &game;
+
     // Configure global opengl state
     // ----------------------------
     glEnable(GL_DEPTH_TEST);
@@ -85,16 +76,10 @@ int main()
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    Renderer renderer;
-    RenderableObject backpack("assets/backpack/backpack.obj");
-    RenderableObject backpack2("assets/backpack/backpack.obj");
-    backpack2.transform.Position = glm::vec3(4.0f, 0.f, 2.0f);
-
-    Shader gridShader = ResourceManager::LoadShader("resources/shaders/infinite_grid.vs","resources/shaders/infinite_grid.fs", nullptr,"infinite_grid");
-    scene.objects.push_back(backpack);
-    scene.objects.push_back(backpack2);
+    ResourceManager::LoadShader("resources/shaders/infinite_grid.vs","resources/shaders/infinite_grid.fs", nullptr,"grid");
 
     glfwShowWindow(window);
+    glfwMaximizeWindow(window);
 
     setupQuad();
     
@@ -110,25 +95,20 @@ int main()
         
         // input
         // -----
-        processInput(window);
+        game.ProcessInputs(window, deltaTime);
 
-        scene.mainCamera.Update(deltaTime);
+        game.Update(deltaTime);
         
         // render
         // ------
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        renderer.Render(scene);
+        game.Render();
 
-        // render Grid
-        // -----------
-        gridShader.Use();
-        gridShader.SetMatrix4("projection", scene.mainCamera.GetProjectionMatrix(), true);
-        gridShader.SetMatrix4("view", scene.mainCamera.GetViewMatrix(), true);
-        gridShader.SetVector3f("cameraPos", scene.mainCamera.transform.Position);
-        glBindVertexArray(quadVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        // if(showGrid){
+        //   renderGrid();
+        // }
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -142,6 +122,16 @@ int main()
     glfwTerminate();
     return 0;
 }
+
+// void renderGrid(){
+//   Shader gridShader = ResourceManager::GetShader("grid");
+//   gridShader.Use();
+//   gridShader.SetMatrix4("projection", scene.mainCamera.GetProjectionMatrix(), true);
+//   gridShader.SetMatrix4("view", scene.mainCamera.GetViewMatrix(), true);
+//   gridShader.SetVector3f("cameraPos", scene.mainCamera.transform.Position);
+//   glBindVertexArray(quadVAO);
+//   glDrawArrays(GL_TRIANGLES, 0, 6);
+// }
 
 void setupQuad(){
   float vertices[] = {
@@ -167,17 +157,6 @@ void setupQuad(){
   glBindVertexArray(0);
 }
 
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
-void processInput(GLFWwindow *window)
-{
-    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
-        glfwSetWindowShouldClose(window, true);
-    }
-
-    scene.mainCamera.OnKeyboardDown(window, deltaTime);
-}
-
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -190,5 +169,9 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 
 void mouse_callback(GLFWwindow *window, double xpos, double ypos){
-   scene.mainCamera.ProccessMouseMovement(window, xpos, ypos);
+    gamePtr->mouseCallback(window, xpos, ypos);
+}
+
+void mouse_button_callback(GLFWwindow *window, int button, int action, int mods){
+    gamePtr->mouseButtonCallback(window, button);
 }

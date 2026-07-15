@@ -1,16 +1,23 @@
 {
 	"nodes":[
-		{"id":"e70be381b7a32ee8","x":-660,"y":180,"width":970,"height":487,"color":"6","type":"group","label":"Render Pipeline"},
-		{"id":"348e9928f058c42b","x":-480,"y":-180,"width":610,"height":240,"color":"2","type":"group","label":"Scene Struct"},
-		{"id":"90dd510ec35b3351","x":-460,"y":-20,"width":250,"height":60,"type":"text","text":"Lista de objetos"},
-		{"id":"8702439b44c31bcd","x":-140,"y":-20,"width":250,"height":60,"type":"text","text":"Skybox"},
-		{"id":"e848e82fd459ff6a","x":-300,"y":-160,"width":250,"height":60,"type":"text","text":"Scene"},
-		{"id":"51e879992aa945e0","x":-300,"y":200,"width":250,"height":60,"type":"text","text":"Renderer"},
-		{"id":"06297ec1433e39ae","x":-300,"y":340,"width":250,"height":60,"type":"text","text":"Light Pass"},
-		{"id":"8c6d2fd72889779d","x":-300,"y":460,"width":250,"height":60,"type":"text","text":"Post Processing Pass"},
-		{"id":"98f22ad8145285aa","x":-300,"y":587,"width":250,"height":60,"type":"text","text":"UI Pass"},
-		{"id":"5bdbd4db08b44cbf","x":40,"y":340,"width":250,"height":60,"type":"text","text":"Shadow Map"},
-		{"id":"23c37b5a7b167865","x":-640,"y":340,"width":250,"height":60,"type":"text","text":"SSAO/Deferreding Shading"}
+		{"id":"e70be381b7a32ee8","type":"group","x":-660,"y":180,"width":970,"height":487,"color":"6","label":"Render Pipeline"},
+		{"id":"348e9928f058c42b","type":"group","x":-480,"y":-180,"width":610,"height":240,"color":"2","label":"Scene Struct"},
+		{"id":"9769bafa5b0eaa62","x":-440,"y":-600,"width":600,"height":240,"color":"4","type":"group","label":"Window"},
+		{"id":"d0565661ce5aaced","x":380,"y":-185,"width":180,"height":250,"color":"5","type":"group","label":"Game"},
+		{"id":"90dd510ec35b3351","type":"text","text":"Lista de Componentes","x":-460,"y":-20,"width":250,"height":60},
+		{"id":"8702439b44c31bcd","type":"text","text":"Skybox","x":-140,"y":-20,"width":250,"height":60},
+		{"id":"e848e82fd459ff6a","type":"text","text":"Scene","x":-300,"y":-160,"width":250,"height":60},
+		{"id":"51e879992aa945e0","type":"text","text":"Renderer","x":-300,"y":200,"width":250,"height":60},
+		{"id":"06297ec1433e39ae","type":"text","text":"Light Pass","x":-300,"y":340,"width":250,"height":60},
+		{"id":"8c6d2fd72889779d","type":"text","text":"Post Processing Pass","x":-300,"y":460,"width":250,"height":60},
+		{"id":"98f22ad8145285aa","type":"text","text":"UI Pass","x":-300,"y":587,"width":250,"height":60},
+		{"id":"5bdbd4db08b44cbf","type":"text","text":"Shadow Map","x":40,"y":340,"width":250,"height":60},
+		{"id":"23c37b5a7b167865","type":"text","text":"SSAO/Deferreding Shading","x":-640,"y":340,"width":250,"height":60},
+		{"id":"d3ced99b6155733d","type":"text","text":"Game Class","x":400,"y":-165,"width":140,"height":60},
+		{"id":"f8bfebe3c09507bf","type":"text","text":"Scene","x":408,"y":-15,"width":125,"height":60},
+		{"id":"f6de5275006a1771","x":-420,"y":-440,"width":250,"height":60,"type":"text","text":"Handle Inputs"},
+		{"id":"a3c631b4589d18be","x":-264,"y":-560,"width":250,"height":60,"type":"text","text":"Window Class"},
+		{"id":"e93b34cf8f0935cb","x":-110,"y":-440,"width":250,"height":60,"type":"text","text":"Handle window configs"}
 	],
 	"edges":[
 		{"id":"061b3ca78f6ff64b","fromNode":"e848e82fd459ff6a","fromSide":"bottom","toNode":"90dd510ec35b3351","toSide":"top"},
@@ -20,6 +27,12 @@
 		{"id":"ef59d3740253e7a6","fromNode":"06297ec1433e39ae","fromSide":"bottom","toNode":"8c6d2fd72889779d","toSide":"top"},
 		{"id":"c5a6f72877b7ffb1","fromNode":"8c6d2fd72889779d","fromSide":"bottom","toNode":"98f22ad8145285aa","toSide":"top"},
 		{"id":"f76344db9ed953dc","fromNode":"5bdbd4db08b44cbf","fromSide":"left","toNode":"06297ec1433e39ae","toSide":"right"},
-		{"id":"f2c4751d8c06a2ab","fromNode":"23c37b5a7b167865","fromSide":"right","toNode":"06297ec1433e39ae","toSide":"left"}
+		{"id":"f2c4751d8c06a2ab","fromNode":"23c37b5a7b167865","fromSide":"right","toNode":"06297ec1433e39ae","toSide":"left"},
+		{"id":"098d8be2f32a33a9","fromNode":"d3ced99b6155733d","fromSide":"bottom","toNode":"f8bfebe3c09507bf","toSide":"top","label":"Read/Update"},
+		{"id":"ae174655ed0df7f5","fromNode":"d0565661ce5aaced","fromSide":"left","toNode":"348e9928f058c42b","toSide":"right","label":"Contains"},
+		{"id":"5da4aae35cba558d","fromNode":"d0565661ce5aaced","fromSide":"bottom","toNode":"e70be381b7a32ee8","toSide":"right","label":"Call"},
+		{"id":"1a3271a69a8f37c9","fromNode":"a3c631b4589d18be","fromSide":"bottom","toNode":"f6de5275006a1771","toSide":"top"},
+		{"id":"4329c2435462071b","fromNode":"a3c631b4589d18be","fromSide":"bottom","toNode":"e93b34cf8f0935cb","toSide":"top"},
+		{"id":"70452289b528857d","fromNode":"d0565661ce5aaced","fromSide":"top","toNode":"9769bafa5b0eaa62","toSide":"right","label":"Reads"}
 	]
 }

@@ -21,6 +21,7 @@ private:
   bool mouseOnUpperdge = false;
   bool mouseOnLowerEdge = false;
   bool firstMouse = true;
+  bool canRotate = false;
 
   float lastMouseX = 0.f;
   float lastMouseY = 0.f;
@@ -53,6 +54,8 @@ public:
   void ProcessCameraRotation(float xoffset, float yoffset, GLboolean constrainPitch = true);
 
   void OnKeyboardDown(GLFWwindow *window, float deltaTime);
+
+  void OnMouseButtonDown(GLFWwindow *window, int button);
 
   void Update(float deltaTime);
 

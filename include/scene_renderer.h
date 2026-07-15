@@ -7,6 +7,7 @@
 struct Scene{
     std::vector<RenderableObject> objects;
     Camera mainCamera;
+    glm::vec3 backgroundColor;
 };
 
 class Renderer {
