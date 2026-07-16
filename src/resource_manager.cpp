@@ -4,22 +4,22 @@
 #include <sstream>
 #include <fstream>
 
-std::map<std::string, Shader>  ResourceManager::Shaders;
+std::map<std::string, Shader>  ResourceManager::s_shaders;
 
 Shader ResourceManager::LoadShader(const char *vertexSource, const char *fragmentSource, const char *geometrySource, std::string name)
 {
-    Shaders[name] = loadShaderFromFile(vertexSource, fragmentSource, geometrySource);
-    return Shaders[name];
+    s_shaders[name] = loadShaderFromFile(vertexSource, fragmentSource, geometrySource);
+    return s_shaders[name];
 }
 
 Shader ResourceManager::GetShader(std::string name)
 {
-    return Shaders[name];
+    return s_shaders[name];
 }
 
 void ResourceManager::Clear()
 {
-    for(auto iter : Shaders){
+    for(auto iter : s_shaders){
         glDeleteShader(iter.second.ID);
     }
 }

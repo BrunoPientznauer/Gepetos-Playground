@@ -5,8 +5,8 @@
 
 class Game {
 private:
-  Scene    scene;
-  Renderer renderer;
+  Scene    m_scene;
+  Renderer m_renderer;
 
 public:
  Game();

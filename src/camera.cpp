@@ -9,10 +9,10 @@ Camera::Camera(glm::vec3 position, float aspectRatio, float fov, float yaw, floa
 }
 
 void Camera::ProccessMouseMovement(GLFWwindow *window, double xpos,double ypos) {
-  if (firstMouse) {
-    lastMouseX = xpos;
-    lastMouseY = ypos;
-    firstMouse = false;
+  if (m_firstMouse) {
+    m_lastMouseX = xpos;
+    m_lastMouseY = ypos;
+    m_firstMouse = false;
   }
 
   int screenWidth;
@@ -20,34 +20,34 @@ void Camera::ProccessMouseMovement(GLFWwindow *window, double xpos,double ypos) 
 
   glfwGetWindowSize(window, &screenWidth, &screenHeight);
 
-  float xOffset = xpos - lastMouseX;
-  float yOffset = lastMouseY - ypos;
+  float xOffset = xpos - m_lastMouseX;
+  float yOffset = m_lastMouseY - ypos;
 
-  lastMouseX = xpos;
-  lastMouseY = ypos;
+  m_lastMouseX = xpos;
+  m_lastMouseY = ypos;
 
-  mouseOnRightEdge = (xpos >= (screenWidth - SCREEN_MARGIN));
-  mouseOnLeftEdge = (xpos <= SCREEN_MARGIN);
+  m_mouseOnRightEdge = (xpos >= (screenWidth - SCREEN_MARGIN));
+  m_mouseOnLeftEdge = (xpos <= SCREEN_MARGIN);
 
   ProcessCameraRotation(xOffset, yOffset);
 }
 
 void Camera::Update(float deltaTime) {
-  if (mouseOnRightEdge) {
+  if (m_mouseOnRightEdge) {
     ProcessCameraRotation(1.f, 0.f);
-  } else if (mouseOnLeftEdge) {
+  } else if (m_mouseOnLeftEdge) {
     ProcessCameraRotation(-1.f, 0.f);
   }
 
-  if (mouseOnUpperdge) {
+  if (m_mouseOnUpperdge) {
     ProcessCameraRotation(0.f, -1.f);
-  } else if (mouseOnLowerEdge) {
+  } else if (m_mouseOnLowerEdge) {
     ProcessCameraRotation(0.f, 1.f);
   }
 }
 
 void Camera::ProcessCameraRotation(float xoffset, float yoffset, GLboolean constrainPitch) {
-  if(!canRotate) return;
+  if(!m_canRotate) return;
 
   xoffset *= .1f;
   yoffset *= .1f;
@@ -86,7 +86,7 @@ void Camera::OnKeyboardDown(GLFWwindow *window, float deltaTime) {
   }
 }
 void Camera::OnMouseButtonDown(GLFWwindow *window, int button) {
-  canRotate = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS;
+  m_canRotate = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS;
 }
 
 glm::mat4 Camera::GetViewMatrix() {

@@ -4,7 +4,7 @@
 #include "scene_renderer.h"
 #include <vector>
 
-Game::Game():scene(createScene()) {
+Game::Game():m_scene(createScene()) {
 
 }
 
@@ -13,25 +13,25 @@ Game::~Game() {}
 void Game::Init() {}
 
 void Game::Update(float deltaTime) {
-    scene.mainCamera.Update(deltaTime);
+    m_scene.mainCamera.Update(deltaTime);
 }
 
-void Game::Render() { renderer.Render(this->scene); }
+void Game::Render() { m_renderer.Render(this->m_scene); }
 
 void Game::ProcessInputs(GLFWwindow* window, float deltaTime) {
   if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
     glfwSetWindowShouldClose(window, true);
   }
 
-  scene.mainCamera.OnKeyboardDown(window, deltaTime);
+  m_scene.mainCamera.OnKeyboardDown(window, deltaTime);
 }
 
 void Game::mouseCallback(GLFWwindow *window, double xpos, double ypos) {
-  scene.mainCamera.ProccessMouseMovement(window, xpos, ypos);
+  m_scene.mainCamera.ProccessMouseMovement(window, xpos, ypos);
 }
 
 void Game::mouseButtonCallback(GLFWwindow *window, int button) {
-    scene.mainCamera.OnMouseButtonDown(window, button);
+    m_scene.mainCamera.OnMouseButtonDown(window, button);
 }
 
 Scene Game::createScene() {

@@ -24,10 +24,6 @@ float screen_height = SCR_HEIGHT;
 float deltaTime = 0.f;
 float lastFrame = 0.f;
 
-unsigned int quadVAO, quadVBO;
-
-bool showGrid = true;
-
 Game *gamePtr;
 
 int main()
@@ -106,10 +102,6 @@ int main()
 
         game.Render();
 
-        // if(showGrid){
-        //   renderGrid();
-        // }
-
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
@@ -121,40 +113,6 @@ int main()
     ResourceManager::Clear();
     glfwTerminate();
     return 0;
-}
-
-// void renderGrid(){
-//   Shader gridShader = ResourceManager::GetShader("grid");
-//   gridShader.Use();
-//   gridShader.SetMatrix4("projection", scene.mainCamera.GetProjectionMatrix(), true);
-//   gridShader.SetMatrix4("view", scene.mainCamera.GetViewMatrix(), true);
-//   gridShader.SetVector3f("cameraPos", scene.mainCamera.transform.Position);
-//   glBindVertexArray(quadVAO);
-//   glDrawArrays(GL_TRIANGLES, 0, 6);
-// }
-
-void setupQuad(){
-  float vertices[] = {
-      // Coordenadas   // Textura
-      -0.5f, 0.5f,  0.0f, 0.0f, 1.0f, // Superior Esquerdo
-      -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // Inferior Esquerdo
-      0.5f,  0.5f,  0.0f, 1.0f, 1.0f, // Superior Direito
-      0.5f,  -0.5f, 0.0f, 1.0f, 0.0f  // Inferior Direito
-  };
-
-  glGenVertexArrays(1, &quadVAO);
-  glGenBuffers(1, &quadVBO);
-
-  glBindVertexArray(quadVAO);
-
-  glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-  glEnableVertexAttribArray(0);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
-
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindVertexArray(0);
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

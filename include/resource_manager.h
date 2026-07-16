@@ -8,7 +8,7 @@
 class ResourceManager{
 private:
     // resource storage
-    static std::map<std::string, Shader> Shaders;
+    static std::map<std::string, Shader> s_shaders;
 
 public:
 

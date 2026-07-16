@@ -16,15 +16,15 @@ const float PITCH       =  0.0f;
 class Camera : public GameObject
 {
 private:
-  bool mouseOnRightEdge = false;
-  bool mouseOnLeftEdge = false;
-  bool mouseOnUpperdge = false;
-  bool mouseOnLowerEdge = false;
-  bool firstMouse = true;
-  bool canRotate = false;
+  bool m_mouseOnRightEdge = false;
+  bool m_mouseOnLeftEdge = false;
+  bool m_mouseOnUpperdge = false;
+  bool m_mouseOnLowerEdge = false;
+  bool m_firstMouse = true;
+  bool m_canRotate = false;
 
-  float lastMouseX = 0.f;
-  float lastMouseY = 0.f;
+  float m_lastMouseX = 0.f;
+  float m_lastMouseY = 0.f;
 
 public:
   /* DATA */
