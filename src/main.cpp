@@ -11,7 +11,6 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 void mouse_button_callback(GLFWwindow *window, int button, int action, int mods);
-void setupQuad();
 void renderGrid();
 
 // settings
@@ -24,7 +23,7 @@ float screen_height = SCR_HEIGHT;
 float deltaTime = 0.f;
 float lastFrame = 0.f;
 
-Game *gamePtr;
+Game *g_game;
 
 int main()
 {
@@ -63,7 +62,7 @@ int main()
     }    
 
     Game game;
-    gamePtr = &game;
+    g_game = &game;
 
     // Configure global opengl state
     // ----------------------------
@@ -76,8 +75,6 @@ int main()
 
     glfwShowWindow(window);
     glfwMaximizeWindow(window);
-
-    setupQuad();
     
     // render loop
     // -----------
@@ -112,6 +109,7 @@ int main()
     // ------------------------------------------------------------------
     ResourceManager::Clear();
     glfwTerminate();
+    delete g_game;
     return 0;
 }
 
@@ -127,9 +125,9 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 
 void mouse_callback(GLFWwindow *window, double xpos, double ypos){
-    gamePtr->mouseCallback(window, xpos, ypos);
+    g_game->mouseCallback(window, xpos, ypos);
 }
 
 void mouse_button_callback(GLFWwindow *window, int button, int action, int mods){
-    gamePtr->mouseButtonCallback(window, button);
+    g_game->mouseButtonCallback(window, button);
 }

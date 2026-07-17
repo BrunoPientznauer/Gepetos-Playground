@@ -14,7 +14,7 @@ class Renderer {
 public:
   Renderer();
 
-  void Render(Scene scene);
+  void Render(Scene scene, Mesh teste);
 
 private:
   Shader lightingPassShader;

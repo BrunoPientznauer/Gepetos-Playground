@@ -8,6 +8,8 @@ private:
   Scene    m_scene;
   Renderer m_renderer;
 
+  Mesh m_terrain;
+
 public:
  Game();
  ~Game();

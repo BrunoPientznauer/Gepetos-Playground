@@ -1,6 +1,7 @@
 #ifndef MESH_H
 #define MESH_H
 
+#include <cstddef>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <string>
@@ -33,6 +34,15 @@ public:
     // render data
     unsigned int VAO, VBO, EBO;
 
+        Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
+    {
+        this->vertices = vertices;
+        this->indices = indices;
+        this->textures.clear();
+
+        setupMesh();
+    }
+
     Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures)
     {
         this->vertices = vertices;
@@ -54,23 +64,25 @@ public:
         unsigned int normalNr = 1;
         unsigned int heightNr = 1;
 
-        for (unsigned int i = 0; i < textures.size(); i++) {
-          glActiveTexture(GL_TEXTURE0 + i);
+        if (!textures.empty()) {
+          for (unsigned int i = 0; i < textures.size(); i++) {
+            glActiveTexture(GL_TEXTURE0 + i);
 
-          std::string number;
-          std::string name = textures[i].type;
+            std::string number;
+            std::string name = textures[i].type;
 
-          if (name == "texture_diffuse")
-            number = std::to_string(diffuseNr++);
-          else if (name == "texture_specular")
-            number = std::to_string(specularNr++);
-          else if (name == "texture_normal")
-            number = std::to_string(normalNr++);
-          else if (name == "texture_height")
-            number = std::to_string(heightNr++);
+            if (name == "texture_diffuse")
+              number = std::to_string(diffuseNr++);
+            else if (name == "texture_specular")
+              number = std::to_string(specularNr++);
+            else if (name == "texture_normal")
+              number = std::to_string(normalNr++);
+            else if (name == "texture_height")
+              number = std::to_string(heightNr++);
 
-          shader.SetInteger((name + number).c_str(), i);
-          glBindTexture(GL_TEXTURE_2D, textures[i].Id);
+            shader.SetInteger((name + number).c_str(), i);
+            glBindTexture(GL_TEXTURE_2D, textures[i].Id);
+          }
         }
 
         glBindVertexArray(this->VAO);

@@ -1,14 +1,15 @@
 #include "game.h"
+#include "basic_forms.h"
 #include "camera.h"
 #include "renderable_object.h"
 #include "scene_renderer.h"
 #include <vector>
 
-Game::Game():m_scene(createScene()) {
-
+Game::Game():m_scene(createScene()), m_terrain(GenerateQuad(6, 800.f)){
 }
 
-Game::~Game() {}
+Game::~Game() {
+}
 
 void Game::Init() {}
 
@@ -16,7 +17,9 @@ void Game::Update(float deltaTime) {
     m_scene.mainCamera.Update(deltaTime);
 }
 
-void Game::Render() { m_renderer.Render(this->m_scene); }
+void Game::Render() {
+  m_renderer.Render(this->m_scene, this->m_terrain); 
+}
 
 void Game::ProcessInputs(GLFWwindow* window, float deltaTime) {
   if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -31,7 +34,7 @@ void Game::mouseCallback(GLFWwindow *window, double xpos, double ypos) {
 }
 
 void Game::mouseButtonCallback(GLFWwindow *window, int button) {
-    m_scene.mainCamera.OnMouseButtonDown(window, button);
+  m_scene.mainCamera.OnMouseButtonDown(window, button);
 }
 
 Scene Game::createScene() {
