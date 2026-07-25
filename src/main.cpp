@@ -109,7 +109,6 @@ int main()
     // ------------------------------------------------------------------
     ResourceManager::Clear();
     glfwTerminate();
-    delete g_game;
     return 0;
 }
 

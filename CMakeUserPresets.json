@@ -6,6 +6,14 @@
       "inherits": "debug-ninja",
       "environment": {
         "VCPKG_ROOT": "${sourceDir}/vcpkg/"
-      }}
+      }
+    },
+    {
+      "name": "release-nj",
+      "inherits": "release-ninja",
+      "environment": {
+        "VCPKG_ROOT": "${sourceDir}/vcpkg/"
+      }
+    }
   ]
 }
