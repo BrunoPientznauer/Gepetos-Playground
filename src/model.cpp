@@ -6,6 +6,8 @@
 
 unsigned int TextureFromFile(const char *path, const std::string directory);
 
+Model::Model(std::vector<Mesh> meshes, bool gamma): meshes(meshes), gammaCorrection(gamma) {}
+
 Model::Model(std::string const path, bool gamma) : gammaCorrection(gamma) {
   loadModel(path);
 }
@@ -15,6 +17,7 @@ void Model::Draw(Shader &shader, glm::mat4 modelMatrix) {
     mesh.Draw(shader, modelMatrix);
   }
 }
+
 void Model::loadModel(std::string const path) {
   Assimp::Importer importer;
   const aiScene *scene = importer.ReadFile(

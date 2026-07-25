@@ -15,6 +15,7 @@ public:
     std::vector <Texture> textures_loaded;
     bool gammaCorrection;
 
+    Model(std::vector<Mesh> meshes, bool gamma = false);
     Model(std::string const path, bool gamma = false);
 
     void Draw(Shader &shader, glm::mat4 modelMatrix);

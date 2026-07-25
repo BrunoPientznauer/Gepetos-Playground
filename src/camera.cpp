@@ -34,15 +34,15 @@ void Camera::ProccessMouseMovement(GLFWwindow *window, double xpos,double ypos) 
 
 void Camera::Update(float deltaTime) {
   if (m_mouseOnRightEdge) {
-    ProcessCameraRotation(1.f, 0.f);
+    ProcessCameraRotation(panSpeed * deltaTime, 0.f);
   } else if (m_mouseOnLeftEdge) {
-    ProcessCameraRotation(-1.f, 0.f);
+    ProcessCameraRotation(-panSpeed * deltaTime, 0.f);
   }
 
   if (m_mouseOnUpperdge) {
-    ProcessCameraRotation(0.f, -1.f);
+    ProcessCameraRotation(0.f, -panSpeed * deltaTime);
   } else if (m_mouseOnLowerEdge) {
-    ProcessCameraRotation(0.f, 1.f);
+    ProcessCameraRotation(0.f, panSpeed * deltaTime);
   }
 }
 

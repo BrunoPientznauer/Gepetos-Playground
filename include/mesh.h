@@ -83,6 +83,9 @@ public:
             shader.SetInteger((name + number).c_str(), i);
             glBindTexture(GL_TEXTURE_2D, textures[i].Id);
           }
+        }else{
+          glActiveTexture(GL_TEXTURE0);
+          glBindTexture(GL_TEXTURE_2D, 0);
         }
 
         glBindVertexArray(this->VAO);

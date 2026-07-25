@@ -40,6 +40,7 @@ public:
   glm::vec3 worldUp;
 
   float moveSpeed = 1.0f;
+  float panSpeed = 1.0f;
 
   Camera(glm::vec3 position, float aspectRatio, float fov = 45.f,
          float yaw = YAW, float pitch = PITCH,

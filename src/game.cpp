@@ -1,11 +1,13 @@
 #include "game.h"
 #include "basic_forms.h"
 #include "camera.h"
+#include "mesh.h"
 #include "renderable_object.h"
 #include "scene_renderer.h"
+#include <glm/ext/vector_float3.hpp>
 #include <vector>
 
-Game::Game():m_scene(createScene()), m_terrain(GenerateQuad(6, 800.f)){
+Game::Game():m_scene(createScene()){
 }
 
 Game::~Game() {
@@ -18,7 +20,7 @@ void Game::Update(float deltaTime) {
 }
 
 void Game::Render() {
-  m_renderer.Render(this->m_scene, this->m_terrain); 
+  m_renderer.Render(this->m_scene); 
 }
 
 void Game::ProcessInputs(GLFWwindow* window, float deltaTime) {
@@ -39,15 +41,20 @@ void Game::mouseButtonCallback(GLFWwindow *window, int button) {
 
 Scene Game::createScene() {
     Camera camera(glm::vec3(0.f, .1f, 5.f), 1920.f/1080.f);
+    camera.moveSpeed = 6.f;
+    camera.panSpeed = 300.f;
 
-    RenderableObject backpack("assets/backpack/backpack.obj");
-    RenderableObject backpack2("assets/backpack/backpack.obj");
-    backpack.transform.Position = glm::vec3(0.0f, 1.f, 0.0f);
-    backpack2.transform.Position = glm::vec3(4.0f, 1.f, 2.0f);
+    RenderableObject crab("assets/crab/crab.obj");
+    crab.transform.Position = glm::vec3(0.0f, 1.f, 4.0f);
+
+    std::vector<Mesh> terrainMeshes;
+    terrainMeshes.push_back(GenerateQuad(6, 800.f));
+    RenderableObject terrain(terrainMeshes);
+    terrain.transform.Position += glm::vec3(-400.f, 0.f, -400.f);
 
     std::vector<RenderableObject> objs;
-    objs.push_back(backpack);
-    objs.push_back(backpack2);
+    objs.push_back(crab);
+    objs.push_back(terrain);
 
     return {.objects = objs, .mainCamera = camera};
 }
