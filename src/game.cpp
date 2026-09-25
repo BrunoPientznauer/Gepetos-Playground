@@ -45,12 +45,6 @@ void Game::mouseCallback(GLFWwindow *window, double xpos, double ypos, MouseCont
 
   glfwGetWindowSize(window, &screenWidth, &screenHeight);
 
-  float xOffset = xpos - mouseContext->lastMouseX;
-  float yOffset = mouseContext->lastMouseY - ypos;
-
-  mouseContext->lastMouseX = xpos;
-  mouseContext->lastMouseY = ypos;
-
   mouseContext->mouseOnRightEdge = (xpos >= (screenWidth - SCREEN_MARGIN));
   mouseContext->mouseOnLeftEdge = (xpos <= SCREEN_MARGIN);
 

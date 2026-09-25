@@ -23,9 +23,11 @@ public:
 
 class FreeCameraHandle : public CameraHandle{
 private:
-  float m_moveSpeed = 6.f;
   bool  m_canRotate = false;
   bool  m_constrainPitch = true;
+  float m_moveSpeed = 6.f;
+  float m_rotateSpeed = 20.f;
+
 public:
   void Update(Camera *camera) override;
   void OnMouseButtonDown(Camera *camera, GLFWwindow *window, int button) override;

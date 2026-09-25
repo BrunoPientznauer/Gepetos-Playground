@@ -70,8 +70,8 @@ void FreeCameraHandle::processCameraRotation(Camera *camera, float xOffset,float
   xOffset *= .1f;
   yOffset *= .1f;
 
-  camera->yaw   += xOffset * Time::GetDeltaTime();
-  camera->pitch += yOffset * Time::GetDeltaTime();
+  camera->yaw   += xOffset * this->m_rotateSpeed * Time::GetDeltaTime();
+  camera->pitch += yOffset * this->m_rotateSpeed * Time::GetDeltaTime();
 
   if (m_constrainPitch) {
     if (camera->pitch > 89.0f) {
