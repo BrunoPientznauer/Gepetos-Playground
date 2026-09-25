@@ -13,15 +13,15 @@
             "state": {
               "type": "canvas",
               "state": {
-                "file": "Scene.canvas",
+                "file": "Camera/Untitled.canvas",
                 "viewState": {
-                  "x": -36,
-                  "y": -479.05468750000006,
+                  "x": -70.5,
+                  "y": 13,
                   "zoom": 0
                 }
               },
               "icon": "lucide-layout-dashboard",
-              "title": "Scene"
+              "title": "Untitled"
             }
           }
         ]
@@ -44,7 +44,9 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical",
-                "autoReveal": false
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-folder-closed",
               "title": "Files"
@@ -188,7 +190,11 @@
   },
   "active": "46374a18945b1852",
   "lastOpenFiles": [
+    "Camera/Follow Target Camera Handle.md",
+    "Camera/Untitled.canvas",
+    "Camera/Requisitos de Camera.md",
     "Scene.canvas",
+    "Camera",
     "Scene.md"
   ]
 }

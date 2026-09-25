@@ -1,0 +1,3 @@
+- Follow target position from a defined distance.
+- Rotate camera to always look at target
+- Smoothly follows the target instead of snapping to position

@@ -5,6 +5,7 @@
 #include "mesh.h"
 #include "model.h"
 #include "shader.h"
+#include "transform.h"
 #include <string>
 #include <vector>
 
@@ -16,7 +17,7 @@ public:
   RenderableObject(std::vector<Mesh> meshes) : model(meshes) {}
 
   void Draw(Shader &shader){
-    model.Draw(shader, transform.getModelMatrix());
+    model.Draw(shader, calculateModelMatrix(&transform));
   }
 };
 

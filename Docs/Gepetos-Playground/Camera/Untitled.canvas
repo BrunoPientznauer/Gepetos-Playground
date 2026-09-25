@@ -1,0 +1,15 @@
+{
+	"nodes":[
+		{"id":"44ff182698ca4b55","type":"text","text":"Camera","x":-180,"y":-40,"width":250,"height":60,"color":"6"},
+		{"id":"c4ac5ea50e9fc98a","type":"text","text":"Controls the camera movement behaviour, such as moving according to user input or follow a specific object","x":280,"y":-266,"width":300,"height":152},
+		{"id":"6cf38c9f323d4352","type":"text","text":"Camera Handle","x":-180,"y":-220,"width":250,"height":60,"color":"6"},
+		{"id":"998ac9b039091514","type":"text","text":"FollowTargetCamera","x":-785,"y":-220,"width":250,"height":60,"color":"2"},
+		{"id":"b13ca4ba7c0d529c","type":"file","file":"Camera/Follow Target Camera Handle.md","x":-860,"y":-14,"width":400,"height":400,"color":"2"}
+	],
+	"edges":[
+		{"id":"565b3647b7ffbc39","fromNode":"6cf38c9f323d4352","fromSide":"bottom","toNode":"44ff182698ca4b55","toSide":"top","label":"Control Movement"},
+		{"id":"5a7a182317294602","fromNode":"6cf38c9f323d4352","fromSide":"right","toNode":"c4ac5ea50e9fc98a","toSide":"left"},
+		{"id":"d02c754fc146a1d8","fromNode":"998ac9b039091514","fromSide":"bottom","toNode":"b13ca4ba7c0d529c","toSide":"top"},
+		{"id":"50a5784edfb4fb01","fromNode":"998ac9b039091514","fromSide":"right","toNode":"6cf38c9f323d4352","toSide":"left","label":"Inherits"}
+	]
+}

@@ -1,4 +1,5 @@
 #include "scene_renderer.h"
+#include "camera.h"
 #include "resource_manager.h"
 
 Renderer::Renderer() {
@@ -8,8 +9,8 @@ Renderer::Renderer() {
 }
 
 void Renderer::Render(Scene scene){
-    this->lightingPassShader.SetMatrix4("projection", scene.mainCamera.GetProjectionMatrix(), true);
-    this->lightingPassShader.SetMatrix4("view", scene.mainCamera.GetViewMatrix(), true);
+    this->lightingPassShader.SetMatrix4("projection", CameraProjectionMatrix(&scene.mainCamera), true);
+    this->lightingPassShader.SetMatrix4("view", CameraViewMatrix(&scene.mainCamera), true);
 
     for(auto obj : scene.objects){
         obj.Draw(this->lightingPassShader);

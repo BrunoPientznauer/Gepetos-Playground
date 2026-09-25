@@ -28,3 +28,6 @@ CTestTestfile.cmake
 _deps
 CMakeUserPresets.json
 
+# test output & cache
+Testing/
+.cache/

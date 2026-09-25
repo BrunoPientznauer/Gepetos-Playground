@@ -3,8 +3,10 @@
 #include <GLFW/glfw3.h>
 #include <glm/ext/vector_float3.hpp>
 #include <iostream>
+#include "globals.h"
 #include "resource_manager.h"
 #include <stb_image.h>
+#include "time.h"
 
 
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
@@ -20,10 +22,10 @@ unsigned int SCR_HEIGHT = 600;
 float screen_width = SCR_WIDTH;
 float screen_height = SCR_HEIGHT;
 
-float deltaTime = 0.f;
 float lastFrame = 0.f;
 
 Game *g_game;
+MouseContext *g_mouseContext;
 
 int main()
 {
@@ -62,6 +64,8 @@ int main()
     }    
 
     Game game;
+    MouseContext mouseContext;
+    g_mouseContext = &mouseContext;
     g_game = &game;
 
     // Configure global opengl state
@@ -83,14 +87,15 @@ int main()
         
         // calculates delta time
         auto currentFrame =  static_cast<float>(glfwGetTime());
-        deltaTime = currentFrame - lastFrame;
+        // updates delta time globally
+        Time::Update(currentFrame, lastFrame);
         lastFrame = currentFrame;
         
         // input
         // -----
-        game.ProcessInputs(window, deltaTime);
+        game.ProcessInputs(window);
 
-        game.Update(deltaTime);
+        game.Update();
         
         // render
         // ------
@@ -124,7 +129,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 
 void mouse_callback(GLFWwindow *window, double xpos, double ypos){
-    g_game->mouseCallback(window, xpos, ypos);
+    g_game->mouseCallback(window, xpos, ypos, g_mouseContext);
 }
 
 void mouse_button_callback(GLFWwindow *window, int button, int action, int mods){
