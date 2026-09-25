@@ -1,9 +1,7 @@
 #pragma once
 
-#include "globals.h"
 #include "scene_renderer.h"
 #include "camera_handle.h"
-#include <GLFW/glfw3.h>
 
 class Game {
 private:
@@ -20,7 +18,7 @@ public:
  void Render();
  void ProcessInputs(GLFWwindow* window);
 
- void mouseCallback(GLFWwindow *window, double xpos, double ypos, MouseContext *mouseContex);
+ void mouseCallback(GLFWwindow *window);
  void mouseButtonCallback(GLFWwindow *window, int button);
 
  private:

@@ -1,4 +1,5 @@
 #include "camera_handle.h"
+#include "globals.h"
 #include "transform.h"
 #include "time.h"
 
@@ -10,17 +11,17 @@ void FollowTargetCameraHandle::Update(Camera *camera) {}
 #pragma region FreeCameraHandle
 
 void FreeCameraHandle::Update(Camera *camera) {
-//     if (m_mouseOnRightEdge) {
-//     ProcessCameraRotation(panSpeed * deltaTime, 0.f);
-//   } else if (m_mouseOnLeftEdge) {
-//     ProcessCameraRotation(-panSpeed * deltaTime, 0.f);
-//   }
+    if (MouseContext::mouseOnRightEdge) {
+    processCameraRotation(camera, this->m_pan, 0.f);
+  } else if (MouseContext::mouseOnLeftEdge) {
+    processCameraRotation(camera, -this->m_pan, 0.f);
+  }
 
-//   if (m_mouseOnUpperdge) {
-//     ProcessCameraRotation(0.f, -panSpeed * deltaTime);
-//   } else if (m_mouseOnLowerEdge) {
-//     ProcessCameraRotation(0.f, panSpeed * deltaTime);
-//   }
+  if (MouseContext::mouseOnUpperdge) {
+    processCameraRotation(camera, 0.f, this->m_pan);
+  } else if (MouseContext::mouseOnLowerEdge) {
+    processCameraRotation(camera, 0.f, -this->m_pan);
+  }
 }
 
 void FreeCameraHandle::OnMouseButtonDown(Camera *camera, GLFWwindow *window, int button) {
@@ -45,25 +46,19 @@ void FreeCameraHandle::OnKeyboardDown(Camera *camera, GLFWwindow *window) {
   }
 }
 
-void FreeCameraHandle::ProccessMouseMovement(Camera *camera, GLFWwindow *window, float xpos, float ypos, MouseContext *mouseCtx) {
+void FreeCameraHandle::ProccessMouseMovement(Camera *camera, GLFWwindow *window) {
   int screenWidth;
   int screenHeight;
 
   glfwGetWindowSize(window, &screenWidth, &screenHeight);
 
-  float xOffset = xpos - mouseCtx->lastMouseX;
-  float yOffset = mouseCtx->lastMouseY - ypos;
-
-  mouseCtx->lastMouseX = xpos;
-  mouseCtx->lastMouseY = ypos;
-
-  mouseCtx->mouseOnRightEdge = (xpos >= (screenWidth - SCREEN_MARGIN));
-  mouseCtx->mouseOnLeftEdge = (xpos <= SCREEN_MARGIN);
+  float xOffset = MouseContext::posX - MouseContext::lastMouseX;
+  float yOffset = MouseContext::lastMouseY - MouseContext::posY;
 
   processCameraRotation(camera, xOffset, yOffset);
 }
 
-void FreeCameraHandle::processCameraRotation(Camera *camera, float xOffset,float yOffset) {
+void FreeCameraHandle::processCameraRotation(Camera *camera, float xOffset, float yOffset) {
   if (!m_canRotate)
     return;
 

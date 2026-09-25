@@ -18,7 +18,7 @@ Game::~Game() {
 void Game::Init() {}
 
 void Game::Update() {
-    // this->m_cameraHandle.Update(&this->m_scene.mainCamera, deltaTime);
+    this->m_cameraHandle.Update(&this->m_scene.mainCamera);
 }
 
 void Game::Render() {
@@ -33,22 +33,8 @@ void Game::ProcessInputs(GLFWwindow* window) {
   this->m_cameraHandle.OnKeyboardDown(&this->m_scene.mainCamera, window);
 }
 
-void Game::mouseCallback(GLFWwindow *window, double xpos, double ypos, MouseContext *mouseContext) {
-   if (mouseContext->firstMouse) {
-    mouseContext->lastMouseX = xpos;
-    mouseContext->lastMouseY = ypos;
-    mouseContext->firstMouse = false;
-  }
-
-  int screenWidth;
-  int screenHeight;
-
-  glfwGetWindowSize(window, &screenWidth, &screenHeight);
-
-  mouseContext->mouseOnRightEdge = (xpos >= (screenWidth - SCREEN_MARGIN));
-  mouseContext->mouseOnLeftEdge = (xpos <= SCREEN_MARGIN);
-
-  this->m_cameraHandle.ProccessMouseMovement(&this->m_scene.mainCamera, window, xpos, ypos, mouseContext);
+void Game::mouseCallback(GLFWwindow *window) {
+  this->m_cameraHandle.ProccessMouseMovement(&this->m_scene.mainCamera, window);
 }
 
 void Game::mouseButtonCallback(GLFWwindow *window, int button) {
