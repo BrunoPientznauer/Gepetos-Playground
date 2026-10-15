@@ -14,6 +14,13 @@
       "environment": {
         "VCPKG_ROOT": "${sourceDir}/vcpkg/"
       }
+    },
+    {
+      "name": "release-win",
+      "inherits": "windows-release",
+      "environment": {
+        "VCPKG_ROOT": "${sourceDir}/vcpkg/"
+      }
     }
   ]
 }

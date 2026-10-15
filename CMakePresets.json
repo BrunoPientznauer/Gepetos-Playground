@@ -1,10 +1,10 @@
 {
-  "version": 2,
+  "version": 11,
   "configurePresets": [
     {
       "name": "debug-ninja",
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/debug",
+      "binaryDir": "${sourceDir}/build/unix/debug",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE" :"Debug",
         "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
@@ -13,10 +13,19 @@
     {
       "name": "release-ninja",
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/release",
+      "binaryDir": "${sourceDir}/build/unix/release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE" :"Release",
         "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+      }
+    },
+    {
+      "name": "windows-release",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/x64/release",
+      "toolchainFile": "${sourceDir}/config/mingw-windows-x64.cmake",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE" :"Release"
       }
     }
   ]

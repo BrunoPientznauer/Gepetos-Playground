@@ -25,7 +25,6 @@ float screen_height = SCR_HEIGHT;
 float lastFrame = 0.f;
 
 Game *g_game;
-MouseContext *g_mouseContext;
 
 int main()
 {
@@ -64,8 +63,6 @@ int main()
     }    
 
     Game game;
-    MouseContext mouseContext;
-    g_mouseContext = &mouseContext;
     g_game = &game;
 
     // Configure global opengl state

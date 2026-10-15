@@ -11,17 +11,14 @@
             "id": "46374a18945b1852",
             "type": "leaf",
             "state": {
-              "type": "canvas",
+              "type": "markdown",
               "state": {
-                "file": "Camera/Untitled.canvas",
-                "viewState": {
-                  "x": -70.5,
-                  "y": 13,
-                  "zoom": 0
-                }
+                "file": "Camera/Requisitos de Camera.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-layout-dashboard",
-              "title": "Untitled"
+              "icon": "lucide-file",
+              "title": "Requisitos de Camera"
             }
           }
         ]
